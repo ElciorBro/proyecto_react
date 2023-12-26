@@ -1,0 +1,49 @@
+  /* Estilos de FirstView */
+
+  .firstViewContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Ajusta la altura según tus necesidades, 100vh ocupa el 100% del viewport height */
+  }
+  
+  .firstViewContainer h1,
+  .firstViewContainer p,
+  .firstViewContainer h2 {
+    margin-bottom: 20px; /* Ajusta el margen inferior según tus preferencias */
+  }
+
+
+
+
+  /* Estilos del Componente SecondView */
+  .secondViewContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .categoryList {
+    display: flex;
+    justify-content: center;
+    border-top: 2px solid #ccc; /* Borde superior */
+    border-bottom: 2px solid #ccc; /* Borde inferior */
+    margin-top: 20px; /* Espaciado superior */
+    margin-bottom: 20px; /* Espaciado inferior */
+  }
+  
+  .categoryList div {
+    padding: 10px;
+  }
+  
+  .categoryList a {
+    text-decoration: none;
+    color: #333;
+  }
+  
+  .categoryList div:not(:last-child) {
+    border-right: 2px solid #ccc; /* Borde derecho para todos los elementos excepto el último */
+  }
+  

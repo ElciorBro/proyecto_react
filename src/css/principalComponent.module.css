@@ -1,0 +1,85 @@
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
+/* Estilos del NavBar */
+.navbarContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #333;
+  color: white;
+}
+
+.logo {
+  font-size: 1.5rem;
+}
+
+.links {
+  display: flex;
+  gap: 10px;
+  flex-grow: 1;
+}
+
+.links a {
+  text-decoration: none;
+  color: white;
+}
+
+input {
+  flex-grow: 2;
+  width: 100%;
+  max-width: 500px;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+
+
+/* Estilos del CategoryNav */
+.categoryNavContainer {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #f2f2f2; /* Cambia el color de fondo según tus preferencias */
+  }
+  
+  .categoryNavContainer div {
+    flex: 1;
+    text-align: center;
+  }
+  
+  .categoryNavContainer a {
+    text-decoration: none;
+    color: #333; /* Cambia el color del texto según tus preferencias */
+  }
+
+
+  /* Estilos del componente Footer */
+
+  .footerContainer {
+    background-color: #333;
+    color: white;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .socialIcons {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .socialIcons a {
+    text-decoration: none;
+    color: white;
+  }
+  
+  .contactInfo {
+    text-align: right;
+  }
+  
+  .address,
+  .phone {
+    margin-bottom: 10px;
+  }
+  

@@ -1,0 +1,29 @@
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .product {
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .product img {
+    /* max-width: 100%; */
+    height: 200px;
+    margin-bottom: 10px;
+  }
+  
+  .product h3 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+  }
+  
+  .product p {
+    margin-bottom: 10px;
+  }
+  
+  .price {
+    color: green;
+  }
