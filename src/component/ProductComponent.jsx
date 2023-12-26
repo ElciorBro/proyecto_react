@@ -5,7 +5,7 @@ import { useAppContext } from '../hooks/authHook.jsx';
 import { useFetchData } from '../hooks/productHook';
 import {useQuery, QueryClient, QueryClientProvider} from '@tanstack/react-query'
 
-export const getProducts = async () => {
+const getProducts = async () => {
   const response = await fetch('https://api.escuelajs.co/api/v1/products')
   const json = await response.json()
 

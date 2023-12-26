@@ -1,16 +1,12 @@
 import { useEffect, useState, useReducer, useContext, createContext } from 'react'
 import { BrowserRouter as Router,Routes, Route, Outlet, Link, useParams, Navigate, useLocation } from 'react-router-dom';
 import styles from '../css/home.module.css';
-import { getProducts } from './ProductComponent';
 
 export function Home() {
     return (
         <>
             <div className='firstContainer'>
                 <FirstView />
-            </div>
-            <div className='carrouselContainer'>
-                <Carrousel />
             </div>
             <div className='secondContainer'>
                 <SecondView />
@@ -32,45 +28,97 @@ export function FirstView() {
             <br />
             <br />
             <p>Estas ofertas están disponibles hasta agotar Stock</p>
+            <br />
+            <div className={styles.carrouselContainer}>
+                <FirstCards />
+            </div>
         </div>
     );
 }
 
-async function Carrousel() {
-    try {
-        const products = await getProducts(); // Espera a que la función asíncrona getProducts se resuelva
-        const firstProduct = products[0]?.images || ''; // Usa el operador opcional (?) para manejar el caso en que no haya productos
-        const secondProduct = products[1]?.images || '';
-        const thirdProduct = products[2]?.images || '';
+const getProducts = async () => {
+    const response = await fetch('https://api.escuelajs.co/api/v1/products')
+    const json = await response.json()
+  
+    if(json.error) {
+      throw new Error(json.error)
+    }
+    console.log(json)
+    console.log('Data from getProducts:', json);
+  
+    return json;
+  }
 
-        return (
-            <div id="carouselExampleFade" className="carousel slide carousel-fade" data-ride="carousel">
-                <div className="carousel-inner">
-                    <div className="carousel-item active">
-                        <img className="d-block w-100" src={firstProduct} alt="First slide" />
-                    </div>
-                    <div className="carousel-item">
-                        <img className="d-block w-100" src={secondProduct} alt="Second slide" />
-                    </div>
-                    <div className="carousel-item">
-                        <img className="d-block w-100" src={thirdProduct} alt="Third slide" />
+function FirstCards() {
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const data = await getProducts();
+                setProducts(data);
+
+            } catch (error) {
+                console.error('Error obteniendo productos:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+
+    }, []);
+
+    if (loading) {
+        return <div>Cargando...</div>;
+    }
+
+    const firstProduct = products[0];
+    // const secondProduct = products[1];
+    // const thirdProduct = products[2]
+
+    console.log(products[0].images[0])
+    // console.log(products[1].images[0])
+    // console.log(products[2].images[0])
+
+    return (
+        <>
+            <div className={styles.cardsContainer}>
+                <div className={styles.firstCard}>
+                    <div className={styles.cardContainer}>
+                        <img className={styles.cardImage} src={products[0].images[0]} alt="" />
+                        <div className={styles.cardContent}>
+                            <h5><Link to='/'>{products[0].title}</Link></h5>
+                            <p>{products[0].description}</p>
+                            <button className={styles.cardButton}>Mostrar más detalles</button>
+                        </div>
                     </div>
                 </div>
-                <a className="carousel-control-prev" href="#carouselExampleFade" role="button" data-slide="prev">
-                    <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span className="sr-only">Previous</span>
-                </a>
-                <a className="carousel-control-next" href="#carouselExampleFade" role="button" data-slide="next">
-                    <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span className="sr-only">Next</span>
-                </a>
+                <div className={styles.firstCard}>
+                    <div className={styles.cardContainer}>
+                        <img className={styles.cardImage} src={products[1].images[0]} alt="" />
+                        <div className={styles.cardContent}>
+                            <h5><Link to='/'>{products[1].title}</Link></h5>
+                            <p>{products[1].description}</p>
+                            <button className={styles.cardButton}>Mostrar más detalles</button>
+                        </div>
+                    </div>
+                </div>
+                <div className={styles.firstCard}>
+                    <div className={styles.cardContainer}>
+                        <img className={styles.cardImage} src={products[2].images[0]} alt="" />
+                        <div className={styles.cardContent}>
+                            <h5><Link to='/'>{products[2].title}</Link></h5>
+                            <p>{products[2].description}</p>
+                            <button className={styles.cardButton}>Mostrar más detalles</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-        );
-    } catch (error) {
-        console.error('Error obteniendo productos:', error);
-        // Puedes manejar el error de alguna manera, por ejemplo, mostrando un mensaje al usuario
-        return <div>Error al obtener productos</div>;
-    }
+        </>
+    );
+
 }
 
 
@@ -93,3 +141,16 @@ export function SecondView() {
     );
 }
 
+function principalCards() {
+
+    return (
+        <div class="card" style="width: 18rem;">
+            <img class="card-img-top" src=".../100px180/" alt="Card image cap"/>
+            <div class="card-body">
+                <h5 class="card-title">Card title</h5>
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+            </div>
+        </div>
+    )
+}
