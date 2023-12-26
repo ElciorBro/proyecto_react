@@ -8,7 +8,7 @@ import './App.css'
 import { Login } from './component/LoginComponent.jsx';
 import { Registration } from './component/RegisterComponent.jsx';
 import { Carrito } from './component/CarritoComponent.jsx';
-import { ProductSection } from './component/ProductComponent.jsx';
+import { ProductSection, Product } from './component/ProductComponent.jsx';
 import { NewProduct } from './component/VentaSection.jsx';
 
 import {useQuery, QueryClient, QueryClientProvider} from '@tanstack/react-query'
@@ -30,6 +30,7 @@ function App() {
                 <Route path="/register" element={<Registration />} />
                 <Route path="/carrito" element={<Carrito />} />
                 <Route path="/productos" element={<ProductSection />} />
+                <Route path="/productos/:name" element={<Product />} />
                 <Route path="/vender" element={<NewProduct />} />
                 <Route path='*' element={<NoMatch/>}></Route>
               </Route>
