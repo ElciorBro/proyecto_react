@@ -29,9 +29,9 @@ const getProductById = async (productId) => {
   return json;
 };
 
-function ProductCarousel({ url1 = null, url2 = null, url3 = null }) {
+function ProductCarousel({ url1, url2, url3}) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const urls = [url1, url2, url3].filter((url) => url !== null);
+  const urls = [url1, url2, url3]
 
   const handlePrev = () => {
     setCurrentIndex((prevIndex) => (prevIndex - 1 + urls.length) % urls.length);
@@ -41,13 +41,12 @@ function ProductCarousel({ url1 = null, url2 = null, url3 = null }) {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % urls.length);
   };
 
+
   return (
-    <div>
-      <div>
-        <button onClick={handlePrev}>Anterior</button>
-        <img src={urls[currentIndex]} alt={`Imagen ${currentIndex + 1}`} />
-        <button onClick={handleNext}>Siguiente</button>
-      </div>
+    <div className={styles.carouselContainer}>
+      <button onClick={handlePrev} className={styles.carouselButton}>Anterior</button>
+      <img src={urls[currentIndex]} alt={`Imagen ${currentIndex + 1}`} className={styles.carouselImage} />
+      <button onClick={handleNext} className={styles.carouselButton}>Siguiente</button>
     </div>
   );
 }
@@ -55,19 +54,40 @@ function ProductCarousel({ url1 = null, url2 = null, url3 = null }) {
 
 export function Product() {
   const { id } = useParams();
-  console.log(product)
+  console.log("id es",id)
+  const [product, setProduct] = useState(null);
 
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const productData = await getProductById(id);
+        setProduct(productData);
+      } catch (error) {
+        console.error('Error fetching product:', error.message);
+      }
+    };
+
+    fetchProduct();
+  }, [id]);
+
+  if (!product) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <div>
-
-
       <h1>ID: {id}</h1>
+        {product.images.length >= 3 ? (
+          <ProductCarousel url1={product.images[0]} url2={product.images[1]} url3={product.images[2]} />
+        ) : (
+          <img src={product.images[0]} alt="" />
+        )}
       <h2>{product.title}</h2>
       <p><b>CATEGORIA:</b>{product.category.name}</p>
       <p><b>DECRIPCION:</b>{product.description}</p>
     </div>
   );
+
 }
 
 
@@ -96,7 +116,7 @@ export function ProductSection() {
           query.data.map((producto) => (
             <div key={producto.id} className={styles.product}>
               <img src={producto.images[0]} alt="" />
-              <h3><Link to={`/productos/${producto.id}`}>{producto.title}</Link></h3>
+              <h3><Link to={`/products/${producto.id}`}>{producto.title}</Link></h3>
               <p>Categoría: {producto.category.name}</p>
               {state.online ? (
                 <p className={styles.price}>Precio: {producto.price}</p>

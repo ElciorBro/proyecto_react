@@ -40,7 +40,7 @@ function LogedNavBar() {
       <Link to="/" onClick={handleLogout} className={styles.links}>Salir</Link>
       <input className={styles.links} type="text" placeholder="Search" />
       <Link to="/carrito" className={styles.links}>Carrito</Link>
-      <Link to="/vender" className={styles.links}>vender</Link>
+      <Link to="/products/create" className={styles.links}>vender</Link>
     </nav>
   );
 }
@@ -78,7 +78,7 @@ function CategoryNav() {
     <nav className={styles.categoryNavContainer}>
       <div className="nuevo"><Link to="/">Home</Link></div>
       <div className="nosotros"><Link to="/nosotros">Sobre Nosotros</Link></div>
-      <div className="productos"><Link to="/productos">Productos</Link></div>
+      <div className="productos"><Link to="/products">Productos</Link></div>
       <div className="art3"><Link to="/liquidacion">Liquidacion</Link></div>
       <div className="art4"><Link to="/contactenos">Contactenos</Link></div>
     </nav>

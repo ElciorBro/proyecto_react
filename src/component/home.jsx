@@ -1,6 +1,7 @@
 import { useEffect, useState, useReducer, useContext, createContext } from 'react'
 import { BrowserRouter as Router,Routes, Route, Outlet, Link, useParams, Navigate, useLocation } from 'react-router-dom';
 import styles from '../css/home.module.css';
+import { getCategories } from '../utils/getCategory';
 
 export function Home() {
     return (
@@ -122,22 +123,37 @@ function FirstCards() {
 }
 
 
-const CATEGORY = ['Categoria 1', 'categoria 2', 'categoria 3', 'categoria 4', 'categoria 5']
 
 export function SecondView() {
+    const [categories, setCategories] = useState([]);
+
+    useEffect(() => {
+      const fetchCategories = async () => {
+        try {
+          const categoryData = await getCategories();
+          setCategories(categoryData);
+        } catch (error) {
+          console.error('Error fetching categories:', error.message);
+        }
+      };
+  
+      fetchCategories();
+    }, []);
+
+
     console.log("renderizando secondView")
 
     return (
         <div className={styles.secondViewContainer}>
-            <h2>EXPLORA TODAS NUESTRAS CATEGORIAS DE PRODUCTOS</h2>
-            <div className={styles.categoryList}>
-                {CATEGORY.map((cat, index) => (
-                    <div key={index}>
-                        <a href="">{cat}</a>
-                    </div>
-                ))}
+        <h2>EXPLORA TODAS NUESTRAS CATEGORIAS DE PRODUCTOS</h2>
+        <div className={styles.categoryList}>
+            {categories.map((cat, index) => (
+            <div key={index}>
+                <Link to={`/categories/${cat.id}`}>{cat.name}</Link>
             </div>
+            ))}
         </div>
-    );
+        </div>
+  );
 }
 
