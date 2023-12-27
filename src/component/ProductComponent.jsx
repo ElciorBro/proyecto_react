@@ -4,6 +4,7 @@ import styles from '../css/productComponent.module.css';
 import { useAppContext } from '../hooks/authHook.jsx';
 import { useFetchData } from '../hooks/productHook';
 import {useQuery, QueryClient, QueryClientProvider} from '@tanstack/react-query'
+import { getCategories } from '../utils/getCategory';
 
 const getProducts = async () => {
   const response = await fetch('https://api.escuelajs.co/api/v1/products')
@@ -97,6 +98,23 @@ export function ProductSection() {
       queryKey: ["products"],
       queryFn: getProducts,
     })
+
+    const [searchTerm, setSearchTerm] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState('');
+    const [minPrice, setMinPrice] = useState('');
+    const [maxPrice, setMaxPrice] = useState('');
+
+    const filteredProducts = query.data
+    ? query.data.filter(product =>
+        product.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
+        (selectedCategory === '' || product.category.name === selectedCategory) &&
+        (minPrice === '' || parseFloat(product.price) >= parseFloat(minPrice)) &&
+        (maxPrice === '' || parseFloat(product.price) <= parseFloat(maxPrice))
+      )
+    : [];
+
+    const uniqueCategories = [...new Set(query.data?.map(product => product.category.name))];
+    // const uniqueCategories = getCategories()
   
     if (query.status === 'pending') {
       return <p>Se están cargando los datos...</p>;
@@ -108,29 +126,79 @@ export function ProductSection() {
 
     console.log(query.data)
   
-  return (
-    <div className={styles.container}>
-      <h1>Sección con todos los productos</h1>
-      <div>
-        {query.data && query.data.length > 0 ? (
-          query.data.map((producto) => (
-            <div key={producto.id} className={styles.product}>
-              <img src={producto.images[0]} alt="" />
-              <h3><Link to={`/products/${producto.id}`}>{producto.title}</Link></h3>
-              <p>Categoría: {producto.category.name}</p>
-              {state.online ? (
-                <p className={styles.price}>Precio: {producto.price}</p>
-              ) : (
-                <p>Se requiere estar registrado para ver el precio</p>
-              )}
-              <p>{producto.description}</p>
-            </div>
-          ))
-        ) : (
-          <p>No hay productos disponibles.</p>
-        )}
+    return (
+      <div className={styles.container}>
+        <h1>Sección con todos los productos</h1>
+    
+        {/* Filtros */}
+        <div className={styles.filterContainer}>
+          <input
+            type="text"
+            placeholder="Buscar por título"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className={styles.filterInput}
+          />
+    
+          <label>Filtrar por categoría:</label>
+          <select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            className={styles.filterSelect}
+          >
+            <option value="">Todas las categorías</option>
+            {uniqueCategories.map((category, index) => (
+              <option key={index} value={category}>
+                {category}
+              </option>
+            ))}
+          </select>
+    
+          {/* Siempre mostramos los campos de rango de precios */}
+          <label>Precio mínimo:</label>
+          <input
+            type="number"
+            placeholder="Precio mínimo"
+            value={minPrice}
+            onChange={(e) => setMinPrice(e.target.value)}
+            className={styles.filterInput}
+          />
+    
+          <label>Precio máximo:</label>
+          <input
+            type="number"
+            placeholder="Precio máximo"
+            value={maxPrice}
+            onChange={(e) => setMaxPrice(e.target.value)}
+            className={styles.filterInput}
+          />
+    
+          <button className={styles.filterButton} onClick={() => console.log('Aplicar filtro')}>
+            Filtrar
+          </button>
+        </div>
+    
+        {/* Productos */}
+        <div className={styles.productContainer}>
+          {filteredProducts.length > 0 ? (
+            filteredProducts.map((producto) => (
+              <div key={producto.id} className={styles.product}>
+                <img src={producto.images[0]} alt="" className={styles.carouselImage} />
+                <h3><Link to={`/products/${producto.id}`}>{producto.title}</Link></h3>
+                <p>Categoría: {producto.category.name}</p>
+                {state.online ? (
+                  <p className={styles.price}>Precio: {producto.price}</p>
+                ) : (
+                  <p>Se requiere estar registrado para ver el precio</p>
+                )}
+                <p>{producto.description}</p>
+              </div>
+            ))
+          ) : (
+            <p>No hay productos disponibles.</p>
+          )}
+        </div>
       </div>
-    </div>
-  );
+    );
 }
   
