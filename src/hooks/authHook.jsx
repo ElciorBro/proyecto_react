@@ -1,45 +1,27 @@
 import { useEffect, useState, useReducer, createContext, useContext } from 'react'
 import { BrowserRouter as Router,Routes, Route, Outlet, Link, useParams } from 'react-router-dom';
 import { saveUserData, getUserData } from '../utils/saveUser';
-
-// function saveUserData(userData) {
-//   try {
-//     const jsonString = JSON.stringify(userData);
-
-//     // Guardar en el localStorage
-//     localStorage.setItem('userData', jsonString);
-
-//     console.log('Datos de usuario guardados en el localStorage.');
-//   } catch (error) {
-//     console.error('Error al guardar datos en el localStorage:', error);
-//   }
-// };
+import { getLocalStorageData } from '../utils/getLocalData';
 
 const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
-  const initialState = {
-    name: '',
-    email: '',
-    password: '',
-    telefono: '',
-    direccion: '',
-    Ofertas: false,
-    fechaNacimiento: '',
-    gender: '',
-    online: false
-  };
+  const initialState = getLocalStorageData();
 
 
   const reducer = (state, action) => {
     switch (action.type) {
       case 'LOGIN':
+        localStorage.setItem('user', JSON.stringify(action.payload));
+        localStorage.setItem('online', true);
         return {
           ...state,
           user: action.payload,
           online: true,
         };
       case 'LOGOUT':
+        localStorage.removeItem('user');
+        localStorage.removeItem('online');
         return {
           ...state,
           user: null,

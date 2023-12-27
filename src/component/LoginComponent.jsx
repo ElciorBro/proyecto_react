@@ -25,7 +25,7 @@ const loginMutation = async ({email, password}) => {
 
 export function Login () {
   const { state, dispatch } = useAppContext();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [loginData, setLoginData] = useState({
     email: '',
     password: '',
@@ -34,14 +34,13 @@ export function Login () {
     mutationFn: loginMutation,
     onSuccess: (data) => {
       console.log('Login exitoso:', data);
-      navigate("/")
-
+      dispatch({ type: 'LOGIN', payload: data.user });
+      navigate('/');
     },
     onError: (data) => {
-        console.log('Algo salio mal', data)
-    }
-    
-  })
+      console.log('Algo salió mal', data);
+    },
+  });
 
   console.log(mutation.status)  
   
@@ -51,18 +50,14 @@ export function Login () {
       ...prevData,
       [name]: value,
     }));
-    // setError(null)
   };
-  
+
   const handleSubmit = (e) => {
     e.preventDefault();
     mutation.mutate({
       email: loginData.email,
-      password: loginData.password
-    })
-    dispatch({type: "LOGIN", payload: loginData})
-    console.log("el mutation es",mutation)
-
+      password: loginData.password,
+    });
   };
 
   useEffect(() => {

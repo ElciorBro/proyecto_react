@@ -1,6 +1,6 @@
 import React from 'react';
 import { useEffect, useState, useReducer, useContext, createContext } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, Outlet } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, Outlet , useNavigate} from 'react-router-dom';
 import styles from '../css/principalComponent.module.css';
 import { Home } from './Home.jsx';
 import { useAppContext } from '../hooks/authHook.jsx';
@@ -11,16 +11,17 @@ function NavBar() {
 
   return (
     <>
-      {state.online? (
-          <LogedNavBar />
-        ):(
-          <NoLogedNavBar />
-        )}
+      {state && state.online ? (
+        <LogedNavBar />
+      ) : (
+        <NoLogedNavBar />
+      )}
     </>
   );
 };
 
 function NoLogedNavBar() {
+  console.log("loged navbar")
   return (
     <nav className={styles.navbarContainer}>
       <Link to="/" className={styles.logo}>Logo</Link>
@@ -33,6 +34,16 @@ function NoLogedNavBar() {
 }
 
 function LogedNavBar() {
+  const { dispatch } = useAppContext();
+  const navigate = useNavigate();
+  console.log("loged navbar")
+
+  function handleLogout() {
+    dispatch({ type: "LOGOUT" });
+    console.log("logged out");
+    navigate('/'); // Redirige a la página de inicio después del logout
+  }
+
   return (
     <nav className={styles.navbarContainer}>
       <Link to="/" className={styles.logo}>Logo</Link>
@@ -45,11 +56,7 @@ function LogedNavBar() {
   );
 }
 
-function handleLogout() {
-  dispatch({type: "LOGOUT"})
-  console.log("loged out")
-  navigate('/');
-}
+
 
 function NoMatch() {
     return (
