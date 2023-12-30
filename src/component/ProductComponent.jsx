@@ -5,6 +5,7 @@ import { useAppContext } from '../hooks/authHook.jsx';
 import { useFetchData } from '../hooks/productHook';
 import {useQuery, QueryClient, QueryClientProvider} from '@tanstack/react-query'
 import { getCategories } from '../utils/getCategory';
+import { deleteProductById } from '../utils/deteteProduct';
 
 const getProducts = async () => {
   const response = await fetch('https://api.escuelajs.co/api/v1/products')
@@ -55,8 +56,23 @@ function ProductCarousel({ url1, url2, url3}) {
 
 export function Product() {
   const { id } = useParams();
+  const navigate = useNavigate()
   console.log("id es",id)
   const [product, setProduct] = useState(null);
+
+  const handleDeleteProduct = async () => {
+    try {
+      // Aquí deberías agregar la lógica para verificar si el usuario tiene el rol de administrador.
+      // Puedes usar el contexto de autenticación o cualquier otro método que estés utilizando para manejar los roles de usuario.
+
+      // Lógica de eliminación del producto
+      await deleteProductById(id);
+      // Redirigir a la página de productos después de eliminar exitosamente
+      navigate('/productos');
+    } catch (error) {
+      console.error('Error deleting product:', error.message);
+    }
+  };
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -86,6 +102,8 @@ export function Product() {
       <h2>{product.title}</h2>
       <p><b>CATEGORIA:</b>{product.category.name}</p>
       <p><b>DECRIPCION:</b>{product.description}</p>
+      <br />
+      <button onClick={handleDeleteProduct}>Eliminar Producto</button>
     </div>
   );
 
